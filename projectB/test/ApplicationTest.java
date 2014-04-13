@@ -1,4 +1,6 @@
+import junit.framework.TestCase;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import play.db.jpa.JPA;
@@ -45,12 +47,17 @@ public class ApplicationTest {
     }
 
     @Test
-    public void adding_a_user_to_the_database() {
+    public void the_meta_model_must_contain_the_message_entity() {
         EntityManager entityManager = JPA.em("default");
         Metamodel metamodel = entityManager.getMetamodel();
+        boolean foundMessageEntity = false;
         for (EntityType<?> entityType : metamodel.getEntities()) {
-            System.out.println(entityType.getName());
+            if (entityType.getName().equals("Message")) {
+                foundMessageEntity = true;
+            }
+            System.out.println("Found entity: " + entityType.getName());
         }
+        Assert.assertTrue("The meta model must contain the 'Message' entity.", foundMessageEntity);
     }
 
 
